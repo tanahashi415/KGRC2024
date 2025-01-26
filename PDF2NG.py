@@ -336,7 +336,7 @@ success = False
 vector1 = get_embedding(node_data["title"])
 search_results = paper_search(vector1, k=search_n)
 for result in search_results:
-    if result["score"] >= 0.95:
+    if result["score"] >= 0.9:
         success = True
         node_data["title"] = result["title"]
         node_data["authors"] = result["authors"]
@@ -406,7 +406,7 @@ for reference in reference_list:
     vector1 = get_embedding(reference)
     search_results = paper_search(vector1, k=search_n)
     for result in search_results:
-        if result["score"] >= 0.95:
+        if result["score"] >= 0.9:
             success = True
             records = driver.execute_query(
                 """
@@ -504,7 +504,7 @@ for author in authors:
     vector1 = get_embedding(author)
     search_results = author_search(vector1, k=search_n)
     for result in search_results:
-        if result["score"] >= 0.95:
+        if result["score"] >= 0.9:
             success = True
             driver.execute_query(
                 """
@@ -536,7 +536,7 @@ for author in authors:
                         if similarity >= 0.9:
                             search_results = author_search(vector2, k=search_n)
                             for result in search_results:
-                                if result["score"] >= 0.95:
+                                if result["score"] >= 0.9:
                                     success = True
                                     driver.execute_query(
                                         """
