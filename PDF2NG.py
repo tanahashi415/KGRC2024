@@ -8,6 +8,7 @@ import requests
 import numpy as np
 import datetime
 import time
+import itertools
 from openai import OpenAI
 from unstructured.partition.pdf import partition_pdf
 from unstructured.documents.elements import ListItem
@@ -498,6 +499,7 @@ if type(node_data["authors"]) == str:
 elif type(node_data["authors"]) == list:
     authors = node_data["authors"]
 
+revised_authors = [] 
 for author in authors:
     # データベース内をベクトルインデックスを用いて検索
     success = False
@@ -515,6 +517,7 @@ for author in authors:
                 title = node_data["title"],
                 name = result["name"]
             )
+            revised_authors.append(result["name"])
             break
 
     # OpenAlexAPI を使って検索
@@ -547,6 +550,7 @@ for author in authors:
                                         title = node_data["title"],
                                         name = result["name"]
                                     )
+                                    revised_authors.append(result["name"])
                                     break
                             if success == False:
                                 success = True
@@ -565,6 +569,7 @@ for author in authors:
                                     h_index = work["summary_stats"]["h_index"],
                                     embedding = vector2
                                 )
+                                revised_authors.append(name)
                             break
         else:
             print(f"OpenAlex API Error: {response.status_code}")
@@ -583,6 +588,20 @@ for author in authors:
             field = node_data["field"],
             embedding = vector1
         )
+        revised_authors.append(author)
+
+# 著作同士の共著関係を記述
+for pair in itertools.combinations(revised_authors, 2):
+    driver.execute_query(
+        """
+        MATCH (a:Author {name: $nameA})
+        MATCH (b:Author {name: $nameB})
+        CREATE (a) -[:Collaborate]-> (b)
+        CREATE (a) <-[:Collaborate]- (b)
+        """,
+        nameA = pair[0],
+        nameB = pair[1]
+    )
 
 # 進捗確認用
 print("Author OK")
