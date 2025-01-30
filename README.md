@@ -8,7 +8,8 @@
     │   ├── Sample1.png
     │   ├── Sample2.png
     │   ├── data.backup
-    │   └── data.json
+    │   ├── data.json
+    │   └── verification.pdf
     ├── Use/
     │   ├── PDF2NG.ipynb
     │   └── default.backup
@@ -23,6 +24,8 @@
 構築したナレッジグラフの Neo4j データ  
 ### data.json
 構築したナレッジグラフの JSON データ
+### verification.pdf
+システムの検証データ
 ### PDF2NG.ipynb
 システムの使い方を記述したノートブック
 ### default.backup
