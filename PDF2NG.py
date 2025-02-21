@@ -122,9 +122,12 @@ def reconstruct_text(inverted_index):
 
 # string を date 型に変換する関数
 def string_to_date(string: str):
-    s_format = '%Y-%m-%d'
-    dt = datetime.datetime.strptime(string, s_format)
-    return dt.date()
+    if string == 'unknown':
+        return string
+    else:
+        s_format = '%Y-%m-%d'
+        dt = datetime.datetime.strptime(string, s_format)
+        return dt.date()
 
 # 論文の引用数に応じてラベルを付与する関数
 def citation_label(cited_count):
